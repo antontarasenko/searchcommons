@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Search Lists</title>
+</head>
+<body>
+<form id="search-form" onsubmit="return false;">
+    <label for="query-string">Find</label>
+    <input type="search" id="query-string" name="q">
+    <label for="selected-engine">at</label>
+    <select id="selected-engine" name="e"></select>
+    <button type="submit">Search</button>
+</form>
+<script>
+    function loadSelectedEngineSelect(websiteList) {
+        let selectedEngineSelect = document.getElementById('selected-engine');
+        websiteList.forEach(function (websiteList) {
+            let option = document.createElement('option');
+            option.value = websiteList.googleCseCreatorId + ':' + websiteList.googleCseId;
+            option.text = websiteList.name;
+            selectedEngineSelect.appendChild(option);
+        })
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let websiteLists;
+        fetch('websites.json')
+            .then(response => response.json())
+            .then(data => {
+                websiteLists = data;
+                loadSelectedEngineSelect(websiteLists);
+            });
+
+        document.getElementById('search-form').addEventListener('submit', function (event) {
+            const queryString = document.getElementById('query-string').value;
+            const selectedEngine = document.getElementById('selected-engine').value;
+            window.open(`https://cse.google.com/cse?cx=${selectedEngine}&q=${queryString}`);
+        })
+    });
+</script>
+</body>
+</html>
