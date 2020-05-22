@@ -8,10 +8,11 @@
 <form id="search-form" onsubmit="return false;">
     <label for="query-string">Find</label>
     <input type="search" id="query-string" name="q">
-    <label for="selected-engine">at</label>
+    <label for="selected-engine">on</label>
     <select id="selected-engine" name="e"></select>
     <button type="submit">Search</button>
 </form>
+<div id="website-lists"></div>
 <script>
     function loadSelectedEngineSelect(websiteList) {
         let selectedEngineSelect = document.getElementById('selected-engine');
@@ -20,23 +21,45 @@
             option.value = websiteList.googleCseCreatorId + ':' + websiteList.googleCseId;
             option.text = websiteList.name;
             selectedEngineSelect.appendChild(option);
-        })
+        });
+    }
+
+    function loadWebsiteLists(websiteList) {
+        let websiteListsElement = document.getElementById('website-lists');
+        websiteList.forEach(function (websiteList) {
+            let websiteListElement = document.createElement('div');
+            websiteListElement.innerHTML =
+                `<h2><a href="${websiteList.googleCseUrl}">${websiteList.name}</a></h2>` +
+                `<h3>${websiteList.id}</h3>` +
+                `<p>${websiteList.description}</p>`;
+            websiteListsElement.appendChild(websiteListElement);
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        let websiteLists;
-        fetch('websites.json')
-            .then(response => response.json())
-            .then(data => {
-                websiteLists = data;
+        ['websitesLocal.json', 'websites.json'].forEach(file => fetch(file)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('File ignored: ' + file);
+                }
+            })
+            .then(websiteLists => {
+                websiteLists.forEach(list =>
+                    list.googleCseUrl = `https://cse.google.com/cse?cx=${list.googleCseCreatorId}:${list.googleCseId}`
+                );
                 loadSelectedEngineSelect(websiteLists);
-            });
+                loadWebsiteLists(websiteLists);
+            })
+            .catch(error => console.warn(error))
+        );
+    });
 
-        document.getElementById('search-form').addEventListener('submit', function (event) {
-            const queryString = document.getElementById('query-string').value;
-            const selectedEngine = document.getElementById('selected-engine').value;
-            window.open(`https://cse.google.com/cse?cx=${selectedEngine}&q=${queryString}`);
-        })
+    document.getElementById('search-form').addEventListener('submit', function (event) {
+        const queryString = document.getElementById('query-string').value;
+        const selectedEngine = document.getElementById('selected-engine').value;
+        window.open(`https://cse.google.com/cse?cx=${selectedEngine}&q=${queryString}`);
     });
 </script>
 </body>

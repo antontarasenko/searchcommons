@@ -1,0 +1,7 @@
+*.stackoverflow.com/*
+*.serverfault.com/*
+*.superuser.com/*
+*.stackexchange.com/*
+*.askubuntu.com/*
+*.stackapps.com/*
+*.mathoverflow.net/*
