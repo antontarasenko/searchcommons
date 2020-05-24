@@ -3,42 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Custom Search Lists</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 </head>
 <body>
-<form id="search-form" onsubmit="return false;">
-    <label for="query-string">Find</label>
-    <input type="search" id="query-string" name="q">
-    <label for="selected-engine">on</label>
-    <select id="selected-engine" name="e"></select>
-    <button type="submit">Search</button>
-</form>
-<div id="website-lists"></div>
+<div id="websiteLists">
+    <div v-for="wl in websiteLists">
+        <h2><a v-bind:href="`https://cse.google.com/cse?cx=${wl.googleCseCreatorId}:${wl.googleCseId}`">{{ wl.name }}</a></h2>
+        <p>
+            {{ wl.description }}
+            <span>
+                [
+                <a href="" v-on:click.prevent="downloadAnnotations(wl.id, wl.googleCseId, wl.googleCseCreatorId)">annotations</a>
+                ]
+            </span>
+        </p>
+    </div>
+</div>
 <script>
-    function loadSelectedEngineSelect(websiteList) {
-        let selectedEngineSelect = document.getElementById('selected-engine');
-        websiteList.forEach(function (websiteList) {
-            let option = document.createElement('option');
-            option.value = websiteList.googleCseCreatorId + ':' + websiteList.googleCseId;
-            option.text = websiteList.name;
-            selectedEngineSelect.appendChild(option);
-        });
-    }
-
-    function loadWebsiteLists(websiteList) {
-        let websiteListsElement = document.getElementById('website-lists');
-        websiteList.forEach(function (websiteList) {
-            let websiteListElement = document.createElement('div');
-            websiteListElement.innerHTML =
-                `<h2><a href="${websiteList.googleCseUrl}">${websiteList.name}</a></h2>` +
-                `<h3>${websiteList.id}</h3>` +
-                `<p>${websiteList.description}</p>` +
-                `<p><a href="" onclick="downloadAnnotations('${websiteList.id}', '${websiteList.googleCseId}', '${websiteList.googleCseCreatorId}'); return false;">annotations.tsv</a></p>`;
-            websiteListsElement.appendChild(websiteListElement);
-        });
-    }
+    const WEBSITES_METADATA = ['websitesLocal.json', 'websites.json'];
 
     /**
-     * Multi-browser file download solution from
+     *
+     * Multi-browser file download function from
      * https://stackoverflow.com/questions/3665115/
      * @param name
      * @param content
@@ -73,34 +59,24 @@
                 .replace(/(.+)(\n|$)/g, `$1\t_cse_${googleCseId}$2`);
             tsvContent = tsvContent + contents[sourceFiles.indexOf('exclude.txt')]
                 .replace(/(.+)(\n|$)/g, `$1\t_cse_exclude_${googleCseId}$2`);
-            downloadFile('annotations.tsv', tsvContent, 'text/csv');
+            downloadFile(`${websiteListId}-${new Date().toISOString().substring(0, 10)}.tsv`, tsvContent, 'text/csv');
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        ['websitesLocal.json', 'websites.json'].forEach(file => fetch(file)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('File ignored: ' + file);
-                }
-            })
-            .then(websiteLists => {
-                websiteLists.forEach(list =>
-                    list.googleCseUrl = `https://cse.google.com/cse?cx=${list.googleCseCreatorId}:${list.googleCseId}`
-                );
-                loadSelectedEngineSelect(websiteLists);
-                loadWebsiteLists(websiteLists);
-            })
-            .catch(error => console.log(error))
-        );
-    });
-
-    document.getElementById('search-form').addEventListener('submit', function (event) {
-        const queryString = document.getElementById('query-string').value;
-        const selectedEngine = document.getElementById('selected-engine').value;
-        window.open(`https://cse.google.com/cse?cx=${selectedEngine}&q=${queryString}`);
+    new Vue({
+        el: '#websiteLists',
+        data() {
+            return {
+                websiteLists: null
+            }
+        },
+        mounted() {
+            Promise.all(WEBSITES_METADATA.map(
+                filename => fetch(filename)
+                    .then(response => (response.status === 200) ? response.json() : [])
+                    .then(content => content)
+            )).then(websites => (this.websiteLists = [].concat(...websites)));
+        }
     });
 </script>
 </body>
