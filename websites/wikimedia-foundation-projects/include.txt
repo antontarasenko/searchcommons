@@ -1,0 +1,12 @@
+*.wikimediafoundation.org/*
+*.wikipedia.org/*
+*.wikibooks.org/*
+*.wiktionary.org/*
+*.wikiquote.org/*
+*.wikimedia.org/*
+*.wikisource.org/*
+*.wikiversity.org/*
+*.wikidata.org/*
+*.mediawiki.org/*
+*.wikivoyage.org/*
+*.wikinews.org/*

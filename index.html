@@ -46,18 +46,18 @@
     }
 
     function downloadAnnotations(websiteListId, googleCseId, googleCseCreatorId) {
-        const sourceFiles = ['include.txt', 'exclude.txt'];
+        const ANNOTATION_SOURCES = ['include.txt', 'exclude.txt'];
 
-        Promise.all(sourceFiles.map(
+        Promise.all(ANNOTATION_SOURCES.map(
             file => fetch(`websites/${websiteListId}/${file}`)
                 .then(response => (response.status === 200) ? response.text() : '')
                 .then(content => content))
         ).then(contents => {
             // TODO: Handle newline characters other than "\n"
             let tsvContent = 'URL\tLabel\n';
-            tsvContent = tsvContent + contents[sourceFiles.indexOf('include.txt')]
+            tsvContent = tsvContent + contents[ANNOTATION_SOURCES.indexOf('include.txt')]
                 .replace(/(.+)(\n|$)/g, `$1\t_cse_${googleCseId}$2`);
-            tsvContent = tsvContent + contents[sourceFiles.indexOf('exclude.txt')]
+            tsvContent = tsvContent + contents[ANNOTATION_SOURCES.indexOf('exclude.txt')]
                 .replace(/(.+)(\n|$)/g, `$1\t_cse_exclude_${googleCseId}$2`);
             downloadFile(`${websiteListId}-${new Date().toISOString().substring(0, 10)}.tsv`, tsvContent, 'text/csv');
         });

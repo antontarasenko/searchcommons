@@ -1,0 +1,13 @@
+SELECT DISTINCT ?periodical ?periodicalLabel ?periodicalTypeLabel ?inception ?website WHERE {
+  VALUES ?periodicalType {
+    wd:Q11032    # newspaper
+    wd:Q1110794  # daily newspaper
+    wd:Q2305295  # weekly newspaper
+  }.
+  ?periodical wdt:P31 ?periodicalType.
+  ?periodical wdt:P571 ?inception.
+  ?periodical wdt:P856 ?website.
+  FILTER (YEAR(?inception) < 1920).
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+ORDER BY ASC(?inception)

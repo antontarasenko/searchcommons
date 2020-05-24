@@ -2,8 +2,33 @@
   {
     "id": "stack-exchange-network",
     "name": "Stack Exchange Network",
-    "description": "Websites listed on <a href=\"https://stackexchange.com/sites\">stackexchange.com/sites</a>",
-    "googleCseId": "opnmm9s20sg",
-    "googleCseCreatorId": "002720237717066476899"
+    "createdAt": "2020-05-24T10:57:28.000Z",
+    "description": "Stack Overflow, Super User, Ask Ubuntu, and other websites listed on stackexchange.com/sites",
+    "googleCseId": "10z7awj2l37",
+    "googleCseCreatorId": "007968012720720263530"
+  },
+  {
+    "id": "wikimedia-foundation-projects",
+    "name": "Wikimedia Foundation Projects",
+    "createdAt": "2020-05-24T11:03:52.000Z",
+    "description": "Wikipedia, Wiktionary, Wikidata, and other projects listed on wikimediafoundation.org/our-work/wikimedia-projects",
+    "googleCseId": "ncbvkf7yo3n",
+    "googleCseCreatorId": "007968012720720263530"
+  },
+  {
+    "id": "universities-with-laureates",
+    "name": "Universities with Laureates",
+    "createdAt": "2020-05-24T12:15:48.000Z",
+    "description": "Universities with most Nobel Prize, Fields Medal, and Turing Award laureates",
+    "googleCseId": "9wlhufd9nrx",
+    "googleCseCreatorId": "007968012720720263530"
+  },
+  {
+    "id": "centuries-old-newspapers",
+    "name": "Centuries-Old Newspapers",
+    "createdAt": "2020-05-24T16:25:29.000Z",
+    "description": "Newspapers founded before 1920",
+    "googleCseId": "t1alrprurdj",
+    "googleCseCreatorId": "007968012720720263530"
   }
 ]
