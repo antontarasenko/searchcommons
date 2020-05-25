@@ -7,45 +7,52 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 </head>
 <body>
-<div id="engineSelector">
+<div id="searchBox">
     <label>Search in
         <select v-model="selected" v-on:change="loadCse">
             <option disabled value="">...</option>
-            <option v-for="wl in websiteLists" v-bind:value="wl.googleCseCreatorId + ':' + wl.googleCseId">{{ wl.name }}</option>
+            <option v-for="wl in websiteLists" v-bind:value="wl.googleCseCreatorId + ':' + wl.googleCseId">
+                {{ wl.name }}
+            </option>
         </select>
     </label>
-    <div class="gcse-searchbox"></div>
-    <div class="gcse-searchresults"></div>
+    <div id="gcse"></div>
 </div>
 <script>
     const WEBSITES_METADATA = ['websites.json'];
 
     new Vue({
-        el: '#engineSelector',
+        el: '#searchBox',
         data: {
             selected: '',
             websiteLists: []
         },
         methods: {
             loadCse: function (event) {
-                const cseScriptId = 'googleCseScript';
+                const CSE_SCRIPT_ID = 'googleCseScript';
 
                 // Remove the current script, if exists
-                let currentScript = document.getElementById(cseScriptId);
+                let currentScript = document.getElementById(CSE_SCRIPT_ID);
                 if (currentScript) {
                     currentScript.parentNode.removeChild(currentScript);
                 }
+                // Clear the CSE-related elements
+                let gcseRoot = document.getElementById('gcse');
+                gcseRoot.innerHTML = '';
 
-                // Refresh the divs the script uses
-                let newCseSearchBox = document.createElement('div');
-                newCseSearchBox.class = 'gcse-searchbox';
-                let currentGcseSearchbox = document.getElementsByClassName('gcse-searchbox')[0];
-                currentGcseSearchbox.parentNode.replaceChild(newCseSearchBox, currentGcseSearchbox);
+                // Add new elements
+                let gcseSearchbox = document.createElement('div');
+                gcseSearchbox.className = 'gcse-searchbox';
+                gcseRoot.appendChild(gcseSearchbox);
+
+                let gcseSearchresults = document.createElement('div');
+                gcseSearchresults.className = 'gcse-searchresults';
+                gcseRoot.appendChild(gcseSearchresults);
 
                 // Add a new script
                 let cseScript = document.createElement('script');
                 cseScript.async = true;
-                cseScript.id = cseScriptId;
+                cseScript.id = CSE_SCRIPT_ID;
                 cseScript.src = 'https://cse.google.com/cse.js?cx=' + this.selected;
                 document.head.appendChild(cseScript);
             }
