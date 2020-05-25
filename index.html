@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search in...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+</head>
+<body>
+<div id="engineSelector">
+    <label>Search in
+        <select v-model="selected" v-on:change="loadCse">
+            <option disabled value="">...</option>
+            <option v-for="wl in websiteLists" v-bind:value="wl.googleCseCreatorId + ':' + wl.googleCseId">{{ wl.name }}</option>
+        </select>
+    </label>
+    <div class="gcse-searchbox"></div>
+    <div class="gcse-searchresults"></div>
+</div>
+<script>
+    const WEBSITES_METADATA = ['websites.json'];
+
+    new Vue({
+        el: '#engineSelector',
+        data: {
+            selected: '',
+            websiteLists: []
+        },
+        methods: {
+            loadCse: function (event) {
+                const cseScriptId = 'googleCseScript';
+
+                // Remove the current script, if exists
+                let currentScript = document.getElementById(cseScriptId);
+                if (currentScript) {
+                    currentScript.parentNode.removeChild(currentScript);
+                }
+
+                // Refresh the divs the script uses
+                let newCseSearchBox = document.createElement('div');
+                newCseSearchBox.class = 'gcse-searchbox';
+                let currentGcseSearchbox = document.getElementsByClassName('gcse-searchbox')[0];
+                currentGcseSearchbox.parentNode.replaceChild(newCseSearchBox, currentGcseSearchbox);
+
+                // Add a new script
+                let cseScript = document.createElement('script');
+                cseScript.async = true;
+                cseScript.id = cseScriptId;
+                cseScript.src = 'https://cse.google.com/cse.js?cx=' + this.selected;
+                document.head.appendChild(cseScript);
+            }
+        },
+        mounted() {
+            Promise.all(WEBSITES_METADATA.map(
+                filename => fetch(filename)
+                    .then(response => (response.status === 200) ? response.json() : [])
+                    .then(content => content)
+            )).then(websites => (this.websiteLists = [].concat(...websites)));
+        }
+    });
+</script>
+</body>
+</html>
