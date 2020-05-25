@@ -10,7 +10,7 @@
 <body>
 <div id="searchBox">
     <div id="cseSelector">
-        <select v-model="selected" v-on:change="loadCse">
+        <select v-model="selectedEngineIndex" v-on:change="loadCse">
             <option disabled value="">Search...</option>
             <option v-for="(se, index) in searchEngines" v-bind:value="index">
                 {{ se.name }}
@@ -26,13 +26,14 @@
     new Vue({
         el: '#searchBox',
         data: {
-            selected: '',
+            selectedEngineIndex: '',
             searchEngines: [],
             selectedEngine: {}
         },
         methods: {
             loadCse: function (event) {
-                this.selectedEngine = this.searchEngines[this.selected];
+                this.selectedEngine = this.searchEngines[this.selectedEngineIndex];
+                window.history.replaceState(null, null, '?engine=' + this.selectedEngine.id);
                 const gcseScriptId = 'gcseScript';
 
                 // Remove the current script, if exists
@@ -73,7 +74,15 @@
                 filename => fetch(filename)
                     .then(response => (response.status === 200) ? response.json() : [])
                     .then(content => content)
-            )).then(searchEngines => (this.searchEngines = [].concat(...searchEngines)));
+            )).then(searchEngines => {
+                this.searchEngines = [].concat(...searchEngines);
+                const queryParams = new URLSearchParams(window.location.search);
+                const requestedEngineId = queryParams.get('engine');
+                if (requestedEngineId) {
+                    this.selectedEngineIndex = this.searchEngines.findIndex(engine => (engine.id === requestedEngineId));
+                    this.loadCse();
+                }
+            });
         }
     });
 </script>
