@@ -4,35 +4,38 @@
     <meta charset="UTF-8">
     <title>Search in...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 </head>
 <body>
 <div id="searchBox">
-    <label>Search in
+    <div id="cseSelector">
         <select v-model="selected" v-on:change="loadCse">
-            <option disabled value="">...</option>
-            <option v-for="wl in websiteLists" v-bind:value="wl.googleCseCreatorId + ':' + wl.googleCseId">
-                {{ wl.name }}
+            <option disabled value="">Search...</option>
+            <option v-for="(se, index) in searchEngines" v-bind:value="index">
+                {{ se.name }}
             </option>
         </select>
-    </label>
+    </div>
+    <div id="cseDescription"></div>
     <div id="gcse"></div>
 </div>
 <script>
-    const WEBSITES_METADATA = ['websites.json'];
+    const SEARCH_ENGINES_FILES = ['websites.json'];
 
     new Vue({
         el: '#searchBox',
         data: {
             selected: '',
-            websiteLists: []
+            searchEngines: []
         },
         methods: {
             loadCse: function (event) {
-                const CSE_SCRIPT_ID = 'googleCseScript';
+                const cseScriptId = 'googleCseScript';
+                const selectedEngine = this.searchEngines[this.selected];
 
                 // Remove the current script, if exists
-                let currentScript = document.getElementById(CSE_SCRIPT_ID);
+                let currentScript = document.getElementById(cseScriptId);
                 if (currentScript) {
                     currentScript.parentNode.removeChild(currentScript);
                 }
@@ -41,6 +44,10 @@
                 gcseRoot.innerHTML = '';
 
                 // Add new elements
+                let gcseDescription = document.createElement('div');
+                gcseDescription.innerHTML = selectedEngine.description;
+                gcseRoot.appendChild(gcseDescription);
+
                 let gcseSearchbox = document.createElement('div');
                 gcseSearchbox.className = 'gcse-searchbox';
                 gcseRoot.appendChild(gcseSearchbox);
@@ -52,17 +59,21 @@
                 // Add a new script
                 let cseScript = document.createElement('script');
                 cseScript.async = true;
-                cseScript.id = CSE_SCRIPT_ID;
-                cseScript.src = 'https://cse.google.com/cse.js?cx=' + this.selected;
+                cseScript.id = cseScriptId;
+                cseScript.src =
+                    'https://cse.google.com/cse.js?cx=' +
+                    selectedEngine.googleCseCreatorId +
+                    ':' +
+                    selectedEngine.googleCseId;
                 document.head.appendChild(cseScript);
             }
         },
         mounted() {
-            Promise.all(WEBSITES_METADATA.map(
+            Promise.all(SEARCH_ENGINES_FILES.map(
                 filename => fetch(filename)
                     .then(response => (response.status === 200) ? response.json() : [])
                     .then(content => content)
-            )).then(websites => (this.websiteLists = [].concat(...websites)));
+            )).then(searchEngines => (this.searchEngines = [].concat(...searchEngines)));
         }
     });
 </script>
