@@ -17,37 +17,37 @@
             </option>
         </select>
     </div>
-    <div id="cseDescription"></div>
-    <div id="gcse"></div>
+    <div>{{ selectedEngine.description }}</div>
+    <div id="gcseRoot"></div>
 </div>
 <script>
-    const SEARCH_ENGINES_FILES = ['websites.json'];
+    const SEARCH_ENGINES_CONFIG = ['websites.json'];
 
     new Vue({
         el: '#searchBox',
         data: {
             selected: '',
-            searchEngines: []
+            searchEngines: [],
+            selectedEngine: {}
         },
         methods: {
             loadCse: function (event) {
-                const cseScriptId = 'googleCseScript';
-                const selectedEngine = this.searchEngines[this.selected];
+                this.selectedEngine = this.searchEngines[this.selected];
+                const gcseScriptId = 'gcseScript';
 
                 // Remove the current script, if exists
-                let currentScript = document.getElementById(cseScriptId);
+                let currentScript = document.getElementById(gcseScriptId);
                 if (currentScript) {
                     currentScript.parentNode.removeChild(currentScript);
                 }
-                // Clear the CSE-related elements
-                let gcseRoot = document.getElementById('gcse');
+
+                // Create the element the Google CSE script will work in
+                let gcseRoot = document.getElementById('gcseRoot');
+
+                // Remove the CSE-related elements
                 gcseRoot.innerHTML = '';
 
-                // Add new elements
-                let gcseDescription = document.createElement('div');
-                gcseDescription.innerHTML = selectedEngine.description;
-                gcseRoot.appendChild(gcseDescription);
-
+                // Add templates for the CSE script
                 let gcseSearchbox = document.createElement('div');
                 gcseSearchbox.className = 'gcse-searchbox';
                 gcseRoot.appendChild(gcseSearchbox);
@@ -56,20 +56,20 @@
                 gcseSearchresults.className = 'gcse-searchresults';
                 gcseRoot.appendChild(gcseSearchresults);
 
-                // Add a new script
-                let cseScript = document.createElement('script');
-                cseScript.async = true;
-                cseScript.id = cseScriptId;
-                cseScript.src =
+                // Add the new Google CSE script
+                let gcseScript = document.createElement('script');
+                gcseScript.async = true;
+                gcseScript.id = gcseScriptId;
+                gcseScript.src =
                     'https://cse.google.com/cse.js?cx=' +
-                    selectedEngine.googleCseCreatorId +
+                    this.selectedEngine.googleCseCreatorId +
                     ':' +
-                    selectedEngine.googleCseId;
-                document.head.appendChild(cseScript);
+                    this.selectedEngine.googleCseId;
+                document.head.appendChild(gcseScript);
             }
         },
         mounted() {
-            Promise.all(SEARCH_ENGINES_FILES.map(
+            Promise.all(SEARCH_ENGINES_CONFIG.map(
                 filename => fetch(filename)
                     .then(response => (response.status === 200) ? response.json() : [])
                     .then(content => content)
