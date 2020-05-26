@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search in...</title>
+    <title>SearchX</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 </head>
 <body>
 <div id="searchBox">
-    <div id="cseSelector">
-        <label for="engineSelect">Search<br /></label>
+    <div>
         <select id="engineSelect" v-model="selectedEngineId" v-on:change="loadCse">
             <option disabled value="">Search...</option>
             <option v-for="(se, index) in searchEngines" v-bind:value="se.id">
@@ -21,7 +20,8 @@
     <div>{{ selectedEngine.description }}</div>
     <div>
         <form v-on:submit.prevent="submitSearch">
-            <input type="search" aria-label="Search the selected websites" v-model="query">
+            <input type="text" aria-label="Search the selected websites" v-model="query">
+            <button type="submit">🔍</button>
         </form>
     </div>
 </div>

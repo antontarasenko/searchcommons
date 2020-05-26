@@ -2,4 +2,30 @@ body {
     max-width: 70ch;
     padding: 1ch;
     margin: auto;
+    font-family: sans-serif;
+}
+#searchBox > div {
+    text-align: center;
+    padding: 1ch;
+}
+#searchBox select, input {
+    font-size: 1em;
+    padding: 0.4em 1em 0.4em 1em;
+    border-style: solid;
+    border-radius: 1em;
+    border-color: lightgrey;
+}
+#searchBox input {
+    width: 50ch;
+    padding-right: 2em;
+}
+#searchBox button {
+    width: 3em;
+    margin-left: -3em;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
+#searchBox :focus {
+    outline: none;
 }
