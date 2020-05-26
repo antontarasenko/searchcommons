@@ -10,7 +10,8 @@
 <body>
 <div id="searchBox">
     <div id="cseSelector">
-        <select v-model="selectedEngineId" v-on:change="loadCse">
+        <label for="engineSelect">Search<br /></label>
+        <select id="engineSelect" v-model="selectedEngineId" v-on:change="loadCse">
             <option disabled value="">Search...</option>
             <option v-for="(se, index) in searchEngines" v-bind:value="se.id">
                 {{ se.name }}
@@ -18,8 +19,13 @@
         </select>
     </div>
     <div>{{ selectedEngine.description }}</div>
-    <div id="gcseRoot"></div>
+    <div>
+        <form v-on:submit.prevent="submitSearch">
+            <input type="search" aria-label="Search the selected websites" v-model="query">
+        </form>
+    </div>
 </div>
+<div id="gcseRoot"></div>
 <script>
     const SEARCH_ENGINES_CONFIG = ['websites.json'];
 
@@ -28,21 +34,18 @@
         data: {
             searchEngines: [],
             selectedEngineId: '',
-            selectedEngine: {}
+            selectedEngine: {},
+            query: ''
         },
         methods: {
             loadCse: function (event) {
+                if (!this.selectedEngineId) {
+                    return alert('You forgot to pick the search engine');
+                }
                 this.selectedEngine = this.searchEngines[this.searchEngines.findIndex(engine =>
                     (engine.id === this.selectedEngineId)
                 )];
-                window.history.replaceState(null, null, '?engine=' + this.selectedEngine.id);
-                const gcseScriptId = 'gcseScript';
-
-                // Remove the current script, if exists
-                let currentScript = document.getElementById(gcseScriptId);
-                if (currentScript) {
-                    currentScript.parentNode.removeChild(currentScript);
-                }
+                this.replaceHistoryState();
 
                 // Create the element the Google CSE script will work in
                 let gcseRoot = document.getElementById('gcseRoot');
@@ -51,24 +54,37 @@
                 gcseRoot.innerHTML = '';
 
                 // Add templates for the CSE script
-                let gcseSearchbox = document.createElement('div');
-                gcseSearchbox.className = 'gcse-searchbox';
-                gcseRoot.appendChild(gcseSearchbox);
-
                 let gcseSearchresults = document.createElement('div');
-                gcseSearchresults.className = 'gcse-searchresults';
+                gcseSearchresults.className = 'gcse-searchresults-only';
                 gcseRoot.appendChild(gcseSearchresults);
 
                 // Add the new Google CSE script
                 let gcseScript = document.createElement('script');
                 gcseScript.async = true;
-                gcseScript.id = gcseScriptId;
                 gcseScript.src =
                     'https://cse.google.com/cse.js?cx=' +
                     this.selectedEngine.googleCseCreatorId +
                     ':' +
                     this.selectedEngine.googleCseId;
-                document.head.appendChild(gcseScript);
+                gcseRoot.appendChild(gcseScript);
+            },
+            submitSearch: function (event) {
+                this.replaceHistoryState();
+                this.loadCse();
+            },
+            replaceHistoryState: function () {
+                let parameters = [];
+                if (this.selectedEngineId) {
+                    parameters.push('e=' + encodeURIComponent(this.selectedEngineId));
+                }
+                if (this.query) {
+                    parameters.push('q=' + encodeURIComponent(this.query))
+                }
+                window.history.replaceState(
+                    null,
+                    null,
+                    (parameters.length === 0) ? '' : '?' + parameters.join('&')
+                );
             }
         },
         mounted() {
@@ -78,10 +94,22 @@
                     .then(content => content)
             )).then(searchEngines => {
                 this.searchEngines = [].concat(...searchEngines);
-                const queryParams = new URLSearchParams(window.location.search);
-                const requestedEngineId = queryParams.get('engine');
-                if (requestedEngineId) {
-                    this.selectedEngineId = requestedEngineId;
+                const queryParameters = new URLSearchParams(window.location.search);
+
+                const requestedEngine = queryParameters.get('e');
+                if (requestedEngine) {
+                    this.selectedEngineId = decodeURIComponent(requestedEngine);
+                }
+                const requestedQuery = queryParameters.get('q');
+                if (requestedQuery) {
+                    this.query = decodeURIComponent(requestedQuery);
+                }
+                this.replaceHistoryState();
+
+                if (this.selectedEngineId && this.query) {
+                    this.loadCse();
+                    this.submitSearch();
+                } else if (this.selectedEngineId) {
                     this.loadCse();
                 }
             });
