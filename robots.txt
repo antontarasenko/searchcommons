@@ -2,4 +2,4 @@ user-agent: *
 
 disallow: /websites/
 disallow: /manage.html
-disallow: /websitesLocal.json
+disallow: /engines-local.json
