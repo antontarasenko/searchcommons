@@ -12,7 +12,7 @@ body {
     font-size: 1em;
     padding: 0.4em 1em 0.4em 1em;
     border-style: solid;
-    border-radius: 1em;
+    border-radius: 1.4em;
     border-color: lightgrey;
 }
 #searchBox input {
