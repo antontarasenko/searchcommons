@@ -4,9 +4,17 @@ body {
     margin: auto;
     font-family: sans-serif;
 }
+footer {
+    text-align: center;
+    padding: 1em;
+}
+footer a {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
 #searchBox > div {
     text-align: center;
-    padding: 1ch;
+    padding: 1em;
 }
 #searchBox select, input, button {
     font-size: 1em;
