@@ -17,13 +17,13 @@
             </option>
         </select>
     </div>
-    <div>{{ selectedEngine.description }}</div>
     <div>
         <form v-on:submit.prevent="submitSearch">
             <input type="text" aria-label="Search the selected websites" v-model="query">
             <button type="submit">🔍</button>
         </form>
     </div>
+    <div>{{ selectedEngine.description }}</div>
 </div>
 <div id="gcseRoot"></div>
 <script>
