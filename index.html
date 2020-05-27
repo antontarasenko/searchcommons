@@ -6,24 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.3.0"></script>
 </head>
 <body>
+<header>
+    <a href="/">SearchX</a>
+</header>
 <div id="searchBox">
     <div>
-        <select id="engineSelect" v-model="selectedEngineId" v-on:change="loadCse">
-            <option disabled value="">Search...</option>
+        <select id="engineSelect" aria-label="Restrict search to" v-model="selectedEngineId"
+                v-on:change="updatePage">
+            <option disabled value="">Restrict search to...</option>
             <option v-for="(se, index) in searchEngines" v-bind:value="se.id">
                 {{ se.name }}
             </option>
         </select>
     </div>
     <div>
-        <form v-on:submit.prevent="submitSearch">
+        <form v-on:submit.prevent="updatePage">
             <input type="text" aria-label="Search the selected websites" v-model="query">
             <button type="submit">🔍</button>
         </form>
     </div>
-    <div>{{ selectedEngine.description }}</div>
 </div>
 <div id="gcseRoot"></div>
 <footer>
@@ -39,19 +43,38 @@
         el: '#searchBox',
         data: {
             searchEngines: [],
-            selectedEngineId: '',
             selectedEngine: {},
+            selectedEngineId: '',
             query: ''
         },
         methods: {
-            loadCse: function (event) {
-                if (!this.selectedEngineId) {
-                    return alert('You forgot to pick the search engine');
+            updatePage: function (event) {
+                this.updateHistoryState();
+                if (this.selectedEngineId && this.query) {
+                    this.loadGoogleCse();
                 }
+                if ((event instanceof SubmitEvent) && !this.selectedEngineId) {
+                    alert('Choose the search engine');
+                }
+            },
+            updateHistoryState: function () {
+                let queryParameters = [];
+                if (this.selectedEngineId) {
+                    queryParameters.push('e=' + encodeURIComponent(this.selectedEngineId));
+                }
+                if (this.query) {
+                    queryParameters.push('q=' + encodeURIComponent(this.query))
+                }
+                history.replaceState(
+                    null,
+                    null,
+                    (queryParameters.length === 0) ? '' : '?' + queryParameters.join('&')
+                );
+            },
+            loadGoogleCse: function () {
                 this.selectedEngine = this.searchEngines[this.searchEngines.findIndex(engine =>
                     (engine.id === this.selectedEngineId)
                 )];
-                this.replaceHistoryState();
 
                 // Create the element the Google CSE script will work in
                 let gcseRoot = document.getElementById('gcseRoot');
@@ -73,24 +96,6 @@
                     ':' +
                     this.selectedEngine.googleCseId;
                 gcseRoot.appendChild(gcseScript);
-            },
-            submitSearch: function (event) {
-                this.replaceHistoryState();
-                this.loadCse();
-            },
-            replaceHistoryState: function () {
-                let parameters = [];
-                if (this.selectedEngineId) {
-                    parameters.push('e=' + encodeURIComponent(this.selectedEngineId));
-                }
-                if (this.query) {
-                    parameters.push('q=' + encodeURIComponent(this.query))
-                }
-                window.history.replaceState(
-                    null,
-                    null,
-                    (parameters.length === 0) ? '' : '?' + parameters.join('&')
-                );
             }
         },
         mounted() {
@@ -100,8 +105,8 @@
                     .then(content => content)
             )).then(searchEngines => {
                 this.searchEngines = [].concat(...searchEngines);
-                const queryParameters = new URLSearchParams(window.location.search);
 
+                const queryParameters = new URLSearchParams(window.location.search);
                 const requestedEngine = queryParameters.get('e');
                 if (requestedEngine) {
                     this.selectedEngineId = decodeURIComponent(requestedEngine);
@@ -110,14 +115,8 @@
                 if (requestedQuery) {
                     this.query = decodeURIComponent(requestedQuery);
                 }
-                this.replaceHistoryState();
 
-                if (this.selectedEngineId && this.query) {
-                    this.loadCse();
-                    this.submitSearch();
-                } else if (this.selectedEngineId) {
-                    this.loadCse();
-                }
+                this.updatePage();
             });
         }
     });

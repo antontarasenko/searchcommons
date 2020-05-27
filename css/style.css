@@ -1,8 +1,11 @@
 body {
     max-width: 70ch;
-    padding: 1ch;
+    padding: 1em;
     margin: auto;
     font-family: sans-serif;
+}
+header {
+    padding: 1em;
 }
 footer {
     text-align: center;
@@ -14,24 +17,29 @@ footer a {
 }
 #searchBox > div {
     text-align: center;
-    padding: 1em;
+    padding: 0.2em;
 }
 #searchBox select, input, button {
     font-size: 1em;
     padding: 0.4em 1em 0.4em 1em;
+    margin: 0.5em 0 0.5em 0;
     border-style: solid;
+    border-width: thin;
     border-radius: 1.4em;
     border-color: lightgrey;
+    background: transparent;
+}
+#searchBox select {
+    width: 60%;
 }
 #searchBox input {
-    width: 50ch;
+    width: 70%;
     padding-right: 2em;
 }
 #searchBox button {
     width: 3em;
     margin-left: -3em;
     border: none;
-    background-color: transparent;
 }
 #searchBox :focus {
     outline: none;
