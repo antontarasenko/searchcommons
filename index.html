@@ -2,38 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SearchX</title>
+    <title>Search Commons</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.3.0"></script>
 </head>
 <body>
 <header>
-    <a href="/">SearchX</a>
+    <a href="/">Search Commons</a>
 </header>
 <div id="searchBox">
-    <div>
-        <select id="engineSelect" aria-label="Restrict search to" v-model="selectedEngineId"
-                v-on:change="updatePage">
-            <option disabled value="">Restrict search to...</option>
-            <option v-for="(se, index) in searchEngines" v-bind:value="se.id">
-                {{ se.name }}
-            </option>
-        </select>
-    </div>
-    <div>
-        <form v-on:submit.prevent="updatePage">
-            <input type="text" aria-label="Search the selected websites" v-model="query">
-            <button type="submit">🔍</button>
-        </form>
-    </div>
+    <form v-on:submit.prevent="updatePage">
+        <div>
+            <select aria-label="Restrict search to" v-model="selectedEngineId" v-on:change="updatePage">
+                <option disabled value="">Restrict search to...</option>
+                <option v-for="se in searchEngines" v-bind:value="se.id">
+                    {{ se.name }}
+                </option>
+            </select>
+        </div>
+        <div>
+            <input type="text" aria-label="Search query" v-model="query">
+            <button type="submit" aria-label="Search">🔍</button>
+        </div>
+    </form>
 </div>
 <div id="gcseRoot"></div>
 <footer>
     <p>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy</a>
+        <a>GitHub</a>
     </p>
 </footer>
 <script>
