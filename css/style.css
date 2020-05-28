@@ -7,13 +7,19 @@ body {
 header {
     padding: 1em;
 }
+header a, a:visited {
+    text-decoration: none;
+    color: blue;
+}
 footer {
     text-align: center;
     padding: 1em;
 }
-footer a {
+footer a, a:visited {
     padding-left: 0.5em;
     padding-right: 0.5em;
+    text-decoration: none;
+    color: blue;
 }
 #searchBox div {
     text-align: center;
