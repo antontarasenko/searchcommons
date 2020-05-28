@@ -52,6 +52,11 @@ Please, create a GitHub issue or send Anton Tarasenko an [email][3].
 [Wikidata](https://www.wikidata.org/) provided data for search engine specifications. It's an excellent source of open data organized as graphs.
 
 
+## License
+
+[Apache License 2.0](LICENSE.txt)
+
+
   [1]: https://programmablesearchengine.google.com/
   [2]: https://www.customsearch.ai/
   [3]: mailto:antontarasenko@gmail.com
