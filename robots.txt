@@ -1,5 +1,4 @@
 user-agent: *
 
 disallow: /websites/
-disallow: /manage.html
 disallow: /engines-local.json
