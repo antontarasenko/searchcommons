@@ -1,60 +1,57 @@
-# Custom Search Lists
+# Search Commons
 
-This repository helps to create a custom web search engine.
+Search Commons contains lists of domains you can narrow your web search to.
 
-A custom search engine restricts search results to certain domains. How does it help?
 
-* Restricted search protects from blog spam, promotional websites, SEO rings, low-effort social networks, and unreliable sources.
-* Custom search focuses on websites you have used to, whether it's official documentation or Stack Overflow
-* Search can be narrowed down to specialized websites: dataset aggregators, code repositories, press releases, regulatory filings
+## Why Narrow Search?
 
-Search engines that provide custom search service:
+* Protect search from blog spam, promotional websites, SEO rings, low-effort social networks, and unreliable sources
+* Focus on the websites you have used to, whether official documentation or Stack Overflow
+* Narrow search down to specialized websites: dataset aggregators, code repositories, press releases, regulatory filings
 
-* Google [Programmable Search Engine][1] (previously known as Custom Search Engine)
+
+## Search Engines
+
+You can use the lists provided by Search Commons to create a custom search engine on:
+
+* Google [Programmable Search Engine][1] (also known as Custom Search Engine)
 * Microsoft [Bing Custom Search][2]
 
-Examples that follow use Google's engine.
-
-
-## Usage
-
-### Search Web with a Public Custom Search Engine
-
-* [index.html][index.html]
-
-### Create a Personal Custom Search Engine
-
-You can fork one of the public custom search engines and adjust it for your needs.
-
-1. Create a new Custom Search Engine at [programmablesearchengine.google.com]
-2. Create  and add your search engine to `websitesLocal.json` (if necessary, create the file following the format of `websites.json`)
-3. Start a local server from the root of this repository
-4. Open `index.html` via this server address
-5. Find your search engine in the list and export its annotations
-6. Upload annotations to your Custom Search Engine account
 
 ## Project Structure
 
+### `websites`
+
+Each subdirectory in `websites` contains a search engine specification:
+
+* `include.txt`: Restrict search to these URL patterns
+* `exclude.txt`: Exclude these URL patterns from search
+* `README.md`: How to reproduce `include.txt` and `exclude.txt`
+
+The subdirectory may contain other files.
+
 ### `index.html`
 
-Browser UI to list available engines, perform quick search, and export annotations.
-
-### `websites/`
-
-The directory contains the lists of websites included in particular search engine.
-
-### `websites.json`
-
-The file contains public search engines built with lists from the `websites` directory.
-
-### `websitesLocal.json` (excluded)
-
-The file contains your personal search engines. Identical to `websites.json` in structure. Excluded from the repository to avoid version control conflicts.
+An interface for the search engines created from the specifications in `websites`.
 
 
-## Contributions
+## Contributing
 
+Search Commons can't wait for new lists and edits.
+
+Please, create a GitHub issue or send Anton Tarasenko an [email][3].
+
+
+## Contacts
+
+[antontarasenko@gmail.com][3]
+
+
+## Acknowledgements
+
+[Wikidata](https://www.wikidata.org/) provided data for search engine specifications. It's an excellent source of open data organized as graphs.
 
 
   [1]: https://programmablesearchengine.google.com/
   [2]: https://www.customsearch.ai/
+  [3]: mailto:antontarasenko@gmail.com
