@@ -12,9 +12,9 @@
     <a href="/">Search Commons</a>
 </header>
 <div id="searchBox">
-    <form v-on:submit.prevent="updatePage">
+    <form autocomplete="off" v-on:submit.prevent="updatePage">
         <div>
-            <select aria-label="Restrict search to" v-model="selectedEngineId" v-on:change="updatePage">
+            <select ref="selectedEngineId" aria-label="Restrict search to" v-model="selectedEngineId">
                 <option disabled value="">Restrict search to...</option>
                 <option v-for="se in searchEngines" v-bind:value="se.id">
                     {{ se.name }}
@@ -48,33 +48,39 @@
         },
         methods: {
             updatePage: function (event) {
-                this.updateHistoryState();
+                this.updateState();
+                this.highlightMissingInputs();
                 if (this.selectedEngineId && this.query) {
                     this.loadGoogleCse();
                 }
-                if ((event instanceof SubmitEvent) && !this.selectedEngineId) {
-                    alert('Choose the search engine');
-                }
             },
-            updateHistoryState: function () {
+            updateState: function () {
                 let queryParameters = [];
+                let titleComponents = ['Search Commons'];
                 if (this.selectedEngineId) {
                     queryParameters.push('e=' + encodeURIComponent(this.selectedEngineId));
+                    titleComponents.push(this.selectedEngine.name);
                 }
                 if (this.query) {
-                    queryParameters.push('q=' + encodeURIComponent(this.query))
+                    queryParameters.push('q=' + encodeURIComponent(this.query));
+                    titleComponents.push(this.query);
                 }
                 history.replaceState(
                     null,
                     null,
                     (queryParameters.length === 0) ? '' : '?' + queryParameters.join('&')
                 );
+                document.title = titleComponents.reverse().join(' — ');
+            },
+            highlightMissingInputs: function () {
+                const selectClasses = this.$refs['selectedEngineId'].classList;
+                if (this.query && !this.selectedEngineId && !selectClasses.contains('highlight')) {
+                    selectClasses.add('highlight');
+                } else if (selectClasses.contains('highlight')) {
+                    selectClasses.remove('highlight');
+                }
             },
             loadGoogleCse: function () {
-                this.selectedEngine = this.searchEngines[this.searchEngines.findIndex(engine =>
-                    (engine.id === this.selectedEngineId)
-                )];
-
                 // Create the element the Google CSE script will work in
                 let gcseRoot = document.getElementById('gcseRoot');
 
@@ -95,6 +101,14 @@
                     ':' +
                     this.selectedEngine.googleCseId;
                 gcseRoot.appendChild(gcseScript);
+            }
+        },
+        watch: {
+            selectedEngineId: function () {
+                this.selectedEngine = this.searchEngines[this.searchEngines.findIndex(engine =>
+                    (engine.id === this.selectedEngineId)
+                )];
+                this.updatePage();
             }
         },
         mounted() {

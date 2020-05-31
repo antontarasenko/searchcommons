@@ -2,14 +2,11 @@
 
 Search Commons collects domains you can narrow your web search to.
 
+Search Commons collections can help you to:
 
-## Why Narrow Search?
-
-Protect search from blog spam, promotional websites, SEO rings, low-effort social networks, and unreliable sources.
-
-Focus on the websites you have used to, whether official documentation or Stack Overflow.
-
-Narrow search down to specialized websites: dataset aggregators, code repositories, press releases, regulatory filings.
+* Protect search from blog spam, promotional websites, SEO rings, low-effort social networks, and unreliable sources
+* Focus on the websites you have used to, whether official documentation or Stack Overflow
+* Narrow search down to specialized websites: dataset aggregators, code repositories, press releases, regulatory filings
 
 
 ## Search the Web with Our Public Search Engines

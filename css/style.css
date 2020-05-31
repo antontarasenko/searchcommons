@@ -50,3 +50,6 @@ footer a, a:visited {
 #searchBox :focus {
     outline: none;
 }
+#searchBox .highlight {
+    border-color: red;
+}
