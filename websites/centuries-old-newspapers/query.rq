@@ -1,4 +1,4 @@
-SELECT DISTINCT ?periodical ?periodicalLabel ?periodicalTypeLabel ?inception ?website WHERE {
+SELECT DISTINCT ?periodical ?periodicalLabel ?inception ?website WHERE {
   VALUES ?periodicalType {
     wd:Q11032    # newspaper
     wd:Q1110794  # daily newspaper
