@@ -24,6 +24,11 @@ footer a, a:visited {
 #searchBox div {
     text-align: center;
     padding: 0.2em;
+    position: relative;
+}
+#searchBox a, a:visited {
+    text-decoration: none;
+    color: blue;
 }
 #searchBox select, input, button {
     font-size: 1em;
@@ -52,4 +57,9 @@ footer a, a:visited {
 }
 #searchBox .highlight {
     border-color: red;
+}
+#searchBox .right-sidenote {
+    position: absolute;
+    right: 0.5em;
+    padding: 1em;
 }

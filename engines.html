@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Commons: Engines</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+</head>
+<body>
+<main id="enginesList">
+    <h1>Search Commons Engines</h1>
+    <p>Pick one of the engines below to restrict your search to the chosen websites.</p>
+    <template v-for="se in searchEngines">
+        <h2><a v-bind:href="'/?e=' + se.id" class="repeating-visits">{{ se.name }}</a></h2>
+        <p>{{ se.description }}</p>
+    </template>
+</main>
+<footer><p><a href="/">Home</a></p></footer>
+</body>
+<script>
+    const SEARCH_ENGINES_CONFIG = ['engines.json'];
+
+    new Vue({
+        el: '#enginesList',
+        data: {
+            searchEngines: [],
+        },
+        mounted() {
+            Promise.all(SEARCH_ENGINES_CONFIG.map(
+                filename => fetch(filename)
+                    .then(response => (response.status === 200) ? response.json() : [])
+                    .then(content => content)
+            )).then(searchEngines => {
+                this.searchEngines = [].concat(...searchEngines).sort((a, b) => (a.name < b.name) ? -1 : 1);
+            });
+        }
+    });
+</script>
+</html>

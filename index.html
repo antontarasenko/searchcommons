@@ -14,12 +14,14 @@
 <div id="searchBox">
     <form autocomplete="off" v-on:submit.prevent="updatePage">
         <div>
-            <select ref="selectedEngineId" aria-label="Restrict search to" v-model="selectedEngineId">
+            <select id="selectedEngineId" ref="selectedEngineId" aria-label="Restrict search to"
+                    v-model="selectedEngineId">
                 <option disabled value="">Restrict search to...</option>
                 <option v-for="se in searchEngines" v-bind:value="se.id">
                     {{ se.name }}
                 </option>
             </select>
+            <a class="right-sidenote" href="engines.html">?</a>
         </div>
         <div>
             <input type="text" aria-label="Search query" v-model="query">
@@ -117,7 +119,7 @@
                     .then(response => (response.status === 200) ? response.json() : [])
                     .then(content => content)
             )).then(searchEngines => {
-                this.searchEngines = [].concat(...searchEngines);
+                this.searchEngines = [].concat(...searchEngines).sort((a, b) => (a.name < b.name) ? -1 : 1);
 
                 const queryParameters = new URLSearchParams(window.location.search);
                 const requestedEngine = queryParameters.get('e');
