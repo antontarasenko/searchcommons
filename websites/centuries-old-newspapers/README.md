@@ -1,10 +1,9 @@
 # Centuries-Old Newspapers
 
-The newspapers founded before 1920.
+The websites of newspapers founded before 1920. Age indicates long-lasting editorial traditions. Google ranking sends less popular local newspapers down in the search results.
+
+The New York Times, Washington Post, Financial Times, and other established press are in this list.
 
 ## Reproduction
 
-1. Open <https://query.wikidata.org/>
-2. Run the content of [`query.rq`](query.rq)
-3. Click "Download" > "TSV file" (`query.tsv` file)
-4. Run `python3 make.py` in one folder with `query.tsv`
+File [`make.py`](make.py) requests data from Wikidata.org and creates the list of websites.
