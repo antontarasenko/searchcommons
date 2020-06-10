@@ -4,11 +4,13 @@ body {
     margin: auto;
     font-family: sans-serif;
 }
+a {
+    text-decoration: none;
+}
 header {
     padding: 1em;
 }
 header a, a:visited {
-    text-decoration: none;
     color: blue;
 }
 footer {
@@ -18,7 +20,6 @@ footer {
 footer a, a:visited {
     padding-left: 0.5em;
     padding-right: 0.5em;
-    text-decoration: none;
     color: blue;
 }
 #searchBox div {
@@ -27,7 +28,6 @@ footer a, a:visited {
     position: relative;
 }
 #searchBox a, a:visited {
-    text-decoration: none;
     color: blue;
 }
 #searchBox select, input, button {
