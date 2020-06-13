@@ -30,5 +30,13 @@
     "description": "Newspapers founded before 1920",
     "googleCseCreatorId": "007968012720720263530",
     "googleCseId": "t1alrprurdj"
+  },
+  {
+    "id": "most-visited-websites-excluded",
+    "name": "Most Visited Websites Excluded",
+    "createdAt": "2020-06-13T13:20:30.000Z",
+    "description": "Exclude the top 1000 most visited websites from search results",
+    "googleCseId": "epykc1yjazo",
+    "googleCseCreatorId": "007968012720720263530"
   }
 ]
