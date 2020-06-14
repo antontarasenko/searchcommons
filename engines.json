@@ -38,5 +38,13 @@
     "description": "Exclude the top 1000 most visited websites from search results",
     "googleCseId": "epykc1yjazo",
     "googleCseCreatorId": "007968012720720263530"
+  },
+  {
+    "id": "python-docs",
+    "name": "Python Docs",
+    "createdAt": "2020-06-14T14:36:07.368Z",
+    "description": "Locations of the official documentation for Python and its libraries",
+    "googleCseId": "uzxmkxe42vk",
+    "googleCseCreatorId": "007968012720720263530"
   }
 ]
