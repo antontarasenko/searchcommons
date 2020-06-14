@@ -1,68 +1,58 @@
 # Search Commons
 
-Search Commons collects domains you can narrow your web search to.
-
-Search Commons collections can help you to:
-
-* Protect search from blog spam, promotional websites, SEO rings, low-effort social networks, and unreliable sources
-* Focus on the websites you have used to, whether official documentation or Stack Overflow
-* Narrow search down to specialized websites: dataset aggregators, code repositories, press releases, regulatory filings
+Search Commons is an open source project that maintains a directory of websites you can restrict your search to.
 
 
-## Search the Web with Our Public Search Engines
+## Usage
+
+### Search the Web with Our Public Search Engines
 
 Search Commons maintains a public search engine for every website collection we have.
 
-They are powered by Google [Custom Search][1] and available at [searchcommons.org][4].
+They are powered by Google [Custom Search][1] and available at [SearchCommons.org][4].
 
-
-## Create a Private Search Engine
+### Create a Private Search Engine
 
 You can use the collections provided by Search Commons to create a personal search engine on:
 
-* Google [Programmable Search Engine][1] (also known as Custom Search Engine)
+* Google [Custom Search Engine][1] (also known as Programmable Search Engine)
 * Microsoft [Bing Custom Search][2]
 
+The collections are stored in the [`websites`](websites/) directory.
 
-## Explore Website Collections
+### Request a Search Engine
 
-The collections are stored in the [`websites`](websites/) directory. Each collection contains a search engine specification:
-
-* `include.txt`: Restrict search to these URL patterns
-* `exclude.txt`: Exclude these URL patterns from search
-* `README.md`: How to reproduce `include.txt` and `exclude.txt`
-
-The directories sometimes contain other relevant files.
+You can tell us how Google fails you in GitHub Issues or by [email][3]. We will help you improve the search for your case and add it to our public search engines.
 
 
-## Contribute to Search Commons
+## Project Structure
 
-Search Commons can't wait for your contribution. It can be:
+### Website Collections
 
-* A request for a new website collection or search engine
-* A new collection of websites
-* An edit to existing collections
+Each collection contains a search engine specification:
 
-For this or that, please, create a GitHub issue or send an [email][3].
+* `include.txt`: The URL patterns included in search
+* `exclude.txt`: The URL patterns excluded from search
+* `README.md`: Instructions for reproducing or maintaining the engine
+
+### Public Search Engines
+
+The metadata for public search engines is stored in [`engines.json`](engines.json). Search engines use the default Google Custom Search configuration. No ads, no tracking, except what Google injects in search results as part of its free Custom Search service.
 
 
-## Good to Know: Search Commons is Open and Reproducible
+## Contributing
 
-Search Commons is self-contained in this repository. Searchcommons.org serves the master branch.
-
-All collections are stored in the `websites` directory and supplied with replication instructions.
-
-The metadata for public search engines is in `engines.json`. Search engines use the default Google Custom Search configuration. No ads, no tracking, except what Google injects in search results as part of its free Custom Search service.
+Search Commons is open for contributions. You can discuss contributions in GitHub Issues or by [email][3].
 
 
 ## Contacts
 
-[antontarasenko@gmail.com][3]
+Anton Tarasenko, [antontarasenko@gmail.com][3]
 
 
 ## Acknowledgements
 
-[Wikidata](https://www.wikidata.org/) provided data for search engine specifications. It's an excellent source of open data organized as graphs.
+[Wikidata](https://www.wikidata.org/) provided data for search engine specifications.
 
 
 ## License
